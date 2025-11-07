@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Usuario - RootMind</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #7ECE1F;
+            --color-primary-dark: #6AB519;
+            --color-secondary: #80D620;
+            --color-accent: #84DA20;
+            --color-dark: #121B15;
+            --color-gray-dark: #101913;
+            --color-gray: #272D29;
+            --color-light: #FAFAFA;
+            --color-white: #FCFCFD;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0F1912 0%, #1a2821 100%);
+            color: #E0E0E0;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(18, 27, 21, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--color-primary);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background-image: url('../frontend/src/assets/robot-login.png'); /* 👈 CAMBIA ESTA RUTA */
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-button {
+            padding: 12px 30px;
+            background: transparent;
+            color: var(--color-primary);
+            text-decoration: none;
+            border: 2px solid var(--color-primary);
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--color-primary);
+            color: var(--color-dark);
+            transform: translateX(-5px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(126, 206, 31, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-nav a {
+            color: #B8B8B8;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(126, 206, 31, 0.1);
+            color: var(--color-primary);
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(126, 206, 31, 0.2);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(126, 206, 31, 0.2);
+            border-radius: 20px;
+            padding: 50px;
+        }
+
+        .content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .content h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-top: 60px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(126, 206, 31, 0.3);
+        }
+
+        .content h3 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--color-secondary);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .content h4 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content p {
+            font-size: 16px;
+            color: #B8B8B8;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .content ul, .content ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .content li {
+            font-size: 16px;
+            color: #B8B8B8;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .content th {
+            background: rgba(126, 206, 31, 0.2);
+            color: var(--color-primary);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .content td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(126, 206, 31, 0.1);
+        }
+
+        .content tr:hover {
+            background: rgba(126, 206, 31, 0.05);
+        }
+
+        .content code {
+            background: rgba(126, 206, 31, 0.1);
+            color: var(--color-primary);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .content pre {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--color-primary);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .content blockquote {
+            background: rgba(126, 206, 31, 0.1);
+            border-left: 5px solid var(--color-primary);
+            padding: 20px 25px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            color: #B8B8B8;
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: rgba(126, 206, 31, 0.1);
+            border: 1px solid var(--color-primary);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .info-box.warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #FFC107;
+        }
+
+        .info-box.tip {
+            background: rgba(33, 150, 243, 0.1);
+            border-color: #2196F3;
+        }
+
+        .info-box.success {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4CAF50;
+        }
+
+        .info-box-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box-title .icon {
+            font-size: 24px;
+        }
+
+        /* Image placeholder */
+        .image-placeholder {
+            width: 100%;
+            height: 400px;
+            background: rgba(126, 206, 31, 0.1);
+            border: 2px dashed var(--color-primary);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Search box */
+        .search-box {
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(126, 206, 31, 0.3);
+            border-radius: 50px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background: rgba(126, 206, 31, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+                max-height: none;
+            }
+
+            .content {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .main-container {
+                padding: 20px;
+            }
+
+            .content h1 {
+                font-size: 36px;
+            }
+
+            .content h2 {
+                font-size: 28px;
+            }
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-section">
+                
+                <h1 class="header-title">RootMind - Manual de Usuario</h1>
+            </div>
+            <a href="index.html" class="back-button">← Volver a Presentación</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar en el manual...">
+            </div>
+            <h3 class="sidebar-title">📋 Contenido</h3>
+            <nav>
+                <ul class="sidebar-nav" id="tableOfContents">
+                    <li><a href="#bienvenida" class="active">📘 Bienvenida a RootMind</a></li>
+                    <li><a href="#inicio-sesion">🔐 Inicio de Sesión</a></li>
+                    <li><a href="#dashboard">📊 Dashboard Principal</a></li>
+                    <li><a href="#crear-5-porques">➕ Crear un 5 Porqués</a></li>
+                    <li><a href="#asistencia-ia">🤖 Asistencia de RootMind IA</a></li>
+                    <li><a href="#evaluacion">📊 Sistema de Evaluación</a></li>
+                    <li><a href="#crear-acciones">✅ Crear Acciones</a></li>
+                    <li><a href="#seguimiento-acciones">📋 Seguimiento de Acciones</a></li>
+                    <li><a href="#mis-5-porques">📝 Mis 5 Porqués</a></li>
+                    <li><a href="#rankings">🏆 Rankings y Gamificación</a></li>
+                    <li><a href="#notificaciones">🔔 Notificaciones</a></li>
+                    <li><a href="#perfil">👤 Perfil de Usuario</a></li>
+                    <li><a href="#panel-admin">⚙️ Panel de Administrador</a></li>
+                    <li><a href="#tips">💡 Tips y Mejores Prácticas</a></li>
+                    <li><a href="#faq">❓ Preguntas Frecuentes</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content" id="content">
+            <h1 id="bienvenida">📘 Bienvenida a RootMind</h1>
+
+            <h2>¿Qué es RootMind?</h2>
+            <p>
+                <strong>RootMind</strong> es una plataforma inteligente que te ayuda a resolver problemas de manera estructurada usando la metodología de <strong>5 Porqués</strong>. Con la ayuda de Inteligencia Artificial, puedes:
+            </p>
+
+            <ul>
+                <li>✅ Analizar problemas operativos de forma sistemática</li>
+                <li>✅ Identificar la causa raíz real de los problemas</li>
+                <li>✅ Crear planes de acción efectivos</li>
+                <li>✅ Mejorar tu capacidad de pensamiento crítico</li>
+                <li>✅ Hacer seguimiento a las acciones correctivas</li>
+            </ul>
+
+            <h3>Roles de Usuario</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rol</th>
+                        <th>Descripción</th>
+                        <th>Permisos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>USER</strong></td>
+                        <td>Usuario estándar</td>
+                        <td>Crear 5 Porqués, crear acciones, ver su propio rendimiento</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SUPERVISOR</strong></td>
+                        <td>Supervisor de equipo</td>
+                        <td>Todo lo de USER + revisar trabajo del equipo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ADMIN</strong></td>
+                        <td>Administrador de gerencia</td>
+                        <td>Todo lo anterior + gestionar usuarios de su gerencia</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="inicio-sesion">🔐 Inicio de Sesión</h2>
+
+            <h3>Paso a Paso</h3>
+            <ol>
+                <li>Abre la aplicación RootMind en tu navegador</li>
+                <li>Verás la pantalla de Login con:
+                    <ul>
+                        <li>Campo de <strong>Email</strong></li>
+                        <li>Campo de <strong>Contraseña</strong> (con icono de ojo para mostrar/ocultar)</li>
+                        <li>Botón <strong>"Iniciar Sesión"</strong></li>
+                    </ul>
+                </li>
+                <li>Ingresa tus credenciales</li>
+                <li>Haz clic en <strong>"Iniciar Sesión"</strong></li>
+                <li>Si todo es correcto, serás redirigido al <strong>Dashboard Principal</strong></li>
+            </ol>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/Pantalla%20de%20Login.png?raw=true"
+                     alt="Pantalla de Login"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Pantalla de login mostrando el formulario
+                </p>
+            </div>
+
+            <div class="info-box warning">
+                <div class="info-box-title">
+                    <span class="icon">⚠️</span>
+                    <span>Problemas Comunes</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Problema</th>
+                            <th>Solución</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"Email o contraseña incorrectos"</td>
+                            <td>Verifica que escribiste bien tus credenciales</td>
+                        </tr>
+                        <tr>
+                            <td>"Tu licencia ha vencido"</td>
+                            <td>Contacta a tu administrador</td>
+                        </tr>
+                        <tr>
+                            <td>"Usuario inactivo"</td>
+                            <td>Contacta a tu administrador</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Tip</span>
+                </div>
+                <p>Usa el icono del ojo para verificar que tu contraseña esté escrita correctamente antes de enviar.</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="dashboard">📊 Dashboard Principal</h2>
+
+            <h3>¿Qué Verás al Entrar?</h3>
+            <p>
+                El Dashboard es tu <strong>centro de control</strong>. Aquí encontrarás un resumen de toda tu actividad.
+            </p>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/Dashboard%20Principal.png?raw=true"
+                     alt="Dashboard Principal"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Dashboard completo mostrando estadísticas y gráficos
+                </p>
+            </div>
+
+            <h3>Elementos del Dashboard</h3>
+
+            <h4>A. Menú de Navegación (Sidebar)</h4>
+            <p>El menú lateral contiene:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Icono</th>
+                        <th>Opción</th>
+                        <th>¿Qué hace?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>📊</td>
+                        <td><strong>Dashboard</strong></td>
+                        <td>Vista general de estadísticas</td>
+                    </tr>
+                    <tr>
+                        <td>📝</td>
+                        <td><strong>Mis 5 Porqués</strong></td>
+                        <td>Historial de tus análisis</td>
+                    </tr>
+                    <tr>
+                        <td>➕</td>
+                        <td><strong>Crear 5 Porqués</strong></td>
+                        <td>Crear nuevo análisis</td>
+                    </tr>
+                    <tr>
+                        <td>✅</td>
+                        <td><strong>Acciones</strong></td>
+                        <td>Gestión de planes de acción</td>
+                    </tr>
+                    <tr>
+                        <td>🏆</td>
+                        <td><strong>Rankings</strong></td>
+                        <td>Ver posición en ranking</td>
+                    </tr>
+                    <tr>
+                        <td>🔔</td>
+                        <td><strong>Notificaciones</strong></td>
+                        <td>Ver alertas y notificaciones</td>
+                    </tr>
+                    <tr>
+                        <td>👤</td>
+                        <td><strong>Perfil</strong></td>
+                        <td>Tu información personal</td>
+                    </tr>
+                    <tr>
+                        <td>⚙️</td>
+                        <td><strong>Panel Admin</strong></td>
+                        <td>Gestión (solo ADMIN)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>B. Tarjetas de Estadísticas</h4>
+            <p>Las 4 tarjetas principales muestran:</p>
+            <ol>
+                <li><strong>Promedio General</strong> - Tu puntuación promedio (0-4 puntos)</li>
+                <li><strong>Total Herramientas</strong> - Cuántos 5 Porqués has creado</li>
+                <li><strong>Herramientas de Calidad</strong> - Cuántos tienen 3+ puntos</li>
+                <li><strong>% Calidad</strong> - Porcentaje de herramientas de calidad</li>
+            </ol>
+
+            <h4>C. Gráfico de Distribución Bloom</h4>
+            <p>Este gráfico te muestra en qué nivel de pensamiento crítico te encuentras:</p>
+            <ul>
+                <li>🟢 <strong>EVALUAR</strong> (Nivel más alto)</li>
+                <li>🔵 <strong>ANALIZAR</strong></li>
+                <li>🟡 <strong>APLICAR</strong></li>
+                <li>🟠 <strong>COMPRENDER</strong></li>
+                <li>🔴 <strong>RECORDAR</strong> (Nivel básico)</li>
+            </ul>
+
+            <div class="info-box success">
+                <div class="info-box-title">
+                    <span class="icon">🎯</span>
+                    <span>Objetivo</span>
+                </div>
+                <p>La mayoría de tus 5 Porqués deben estar en nivel EVALUAR o ANALIZAR</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="crear-5-porques">➕ Crear un 5 Porqués - Paso a Paso</h2>
+
+            <h3>¿Cuándo Crear un 5 Porqués?</h3>
+            <p>Crea un 5 Porqués cuando:</p>
+            <ul>
+                <li>🔴 Ocurre un problema operativo</li>
+                <li>📉 Un indicador KPI se ve afectado (TRI, OTIF, ON TIME)</li>
+                <li>🔄 Un problema se repite constantemente</li>
+                <li>🎯 Necesitas mejorar un proceso</li>
+            </ul>
+
+            <h3>Proceso Completo</h3>
+
+            <h4>Paso 1: Acceder al Módulo</h4>
+            <p>En el menú lateral, haz clic en <strong>"Crear 5 Porqués"</strong></p>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/%5BBot%C3%B3n%20Crear%205%20Porqu%C3%A9s.png?raw=true"
+                     alt="Botón Crear 5 Porqués"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Ubicación del botón "Crear 5 Porqués" en el menú lateral
+                </p>
+            </div>
+
+            <h4>Paso 2: Llenar Información Básica</h4>
+            <p>Completa los campos iniciales:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Problema/Situación</strong></td>
+                        <td>Describe el problema que ocurrió</td>
+                        <td>"Entrega tardía a cliente VIP"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Indicador Afectado</strong></td>
+                        <td>Selecciona el KPI impactado</td>
+                        <td>OTIF, TRI, ON TIME, etc.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/Formulario%20Vac%C3%ADo.png?raw=true"
+                     alt="Formulario Básico Vacío"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Formulario inicial mostrando los campos Problema/Situación e Indicador Afectado
+                </p>
+            </div>
+
+            <h4>Paso 3: Escribir los 5 Porqués</h4>
+            <p>Responde las preguntas en secuencia:</p>
+            <pre><code>¿Por qué 1? → ¿Por qué ocurrió el problema?
+    ↓
+¿Por qué 2? → ¿Por qué pasó eso?
+    ↓
+¿Por qué 3? → ¿Por qué fue así?
+    ↓
+¿Por qué 4? → (Opcional) Profundiza más
+    ↓
+¿Por qué 5? → (Opcional) Llega a la raíz profunda</code></pre>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/Escribir%20los%205%20Porqu%C3%A9s.png?raw=true"
+                     alt="Escribir los 5 Porqués"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Formulario para escribir los 5 Porqués en secuencia
+                </p>
+            </div>
+
+            <h4>Ejemplo Real:</h4>
+            <div class="info-box">
+                <p><strong>Problema:</strong> "Entrega tardía a cliente VIP"</p>
+                <br>
+                <p><strong>¿Por qué 1?</strong><br>
+                "El camión salió 2 horas tarde del centro de distribución"</p>
+
+                <p><strong>¿Por qué 2?</strong><br>
+                "El pedido no estaba preparado a tiempo en el almacén"</p>
+
+                <p><strong>¿Por qué 3?</strong><br>
+                "El sistema de picking no priorizó este pedido urgente"</p>
+
+                <p><strong>¿Por qué 4?</strong><br>
+                "No hay configuración de prioridad por tipo de cliente en el sistema"</p>
+
+                <p><strong>¿Por qué 5?</strong><br>
+                "La implementación del WMS se hizo sin considerar la diferenciación de clientes VIP"</p>
+            </div>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Tips para Buenos Porqués</span>
+                </div>
+                <ul>
+                    <li>✅ Cada "Por qué" debe profundizar en la causa anterior</li>
+                    <li>✅ Evita respuestas superficiales como "por descuido" o "por error humano"</li>
+                    <li>✅ Busca causas de proceso, no culpables</li>
+                    <li>✅ Los primeros 3 son <strong>obligatorios</strong></li>
+                </ul>
+            </div>
+
+            <h4>Paso 4: Identificar la Causa Raíz</h4>
+            <p>Después de escribir los porqués, selecciona <strong>cuál es la causa raíz principal</strong>. La causa raíz suele estar en el último "Por qué" que respondiste, porque es la causa más profunda.</p>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/Identificar%20la%20Causa%20Ra%C3%ADz.png?raw=true"
+                     alt="Identificar la Causa Raíz"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Selección de la causa raíz principal del problema
+                </p>
+            </div>
+
+            <h4>Paso 5: Define el Plan de Acción y Guardar para Evaluar</h4>
+            <p>Tienes dos opciones:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Botón</th>
+                        <th>¿Qué hace?</th>
+                        <th>¿Cuándo usarlo?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Agregar Acciones</strong></td>
+                        <td>Permite definir el plan de acción</td>
+                        <td>Cuando quieres crear las acciones correctivas del problema</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Guardar y Evaluar</strong></td>
+                        <td>Guarda y evalúa automáticamente</td>
+                        <td>Estás listo para recibir tu puntuación</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/planes%20de%20accion.png?raw=true"
+                     alt="Formulario de Planes de Acción"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Formulario mostrando los botones Agregar Acciones y Guardar y Evaluar
+                </p>
+            </div>
+
+            <div class="info-box warning">
+                <div class="info-box-title">
+                    <span class="icon">⚠️</span>
+                    <span>Importante</span>
+                </div>
+                <p>Una vez enviado para evaluación, <strong>no podrás editar</strong> el 5 Porqués</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="asistencia-ia">🤖 Asistencia de RootMind IA</h2>
+
+            <h3>¿Qué es RootMind IA?</h3>
+            <p>
+                RootMind es tu <strong>coach personal</strong> que te ayuda a mejorar tus análisis. No es una IA genérica, está entrenada específicamente en metodología de 5 Porqués y pensamiento crítico usando la Taxonomía de Bloom.
+            </p>
+
+            <div class="info-box success">
+                <div class="info-box-title">
+                    <span class="icon">🎯</span>
+                    <span>Tecnología</span>
+                </div>
+                <p>RootMind utiliza <strong>Google Gemini 2.0 Flash Experimental</strong> para brindarte asistencia inteligente en tiempo real.</p>
+            </div>
+
+            <h3>3 Funciones Principales de RootMind</h3>
+
+            <h4>💡 Función 1: Pedir Opciones al Tutor (Sugerir Porqués)</h4>
+            <p><strong>¿Qué hace?</strong></p>
+            <p>En cada campo de "Por qué", encontrarás un botón llamado <strong>"Pedir opciones al Tutor"</strong>. Esta función te ayuda cuando no sabes cómo responder un porqué o quieres validar tu análisis.</p>
+
+            <p><strong>¿Cómo funciona?</strong></p>
+            <ol>
+                <li>Al hacer clic en <strong>"Pedir opciones al Tutor"</strong> por primera vez, RootMind abrirá un formulario</li>
+                <li>El formulario te hará preguntas sobre el contexto del problema para entender mejor la situación
+
+                    <div style="width: 100%; margin: 20px 0; text-align: center;">
+                        <img src="https://github.com/Davidpwbi/Mnuales/blob/main/contexto%20para%20rootmind.png?raw=true"
+                             alt="Formulario de Contexto para RootMind"
+                             style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                        <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                            📸 Formulario donde RootMind hace preguntas para contextualizar el indicador afectado y el problema antes de dar opciones de porqués
+                        </p>
+                    </div>
+
+                </li>
+                <li>RootMind analizará:
+                    <ul>
+                        <li>El <strong>indicador afectado</strong> (TRI, OTIF, ON TIME, etc.)</li>
+                        <li>La <strong>descripción del problema</strong></li>
+                        <li>El <strong>contexto adicional</strong> que proporcionaste</li>
+                        <li>Los <strong>porqués anteriores</strong> que ya escribiste</li>
+                    </ul>
+                </li>
+                <li>Te mostrará <strong>3 opciones</strong> de respuesta para ese porqué
+
+                    <div style="width: 100%; margin: 20px 0; text-align: center;">
+                        <img src="https://github.com/Davidpwbi/Mnuales/blob/main/opcionesd%20eporque%20rootmind.png?raw=true"
+                             alt="Opciones de Porqué de RootMind"
+                             style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                        <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                            📸 RootMind muestra 3 opciones de respuesta para ayudarte con el porqué
+                        </p>
+                    </div>
+
+                </li>
+                <li>Puedes:
+                    <ul>
+                        <li>Seleccionar una de las opciones (se auto-completa el campo)</li>
+                        <li>Usarlas como inspiración y escribir tu propia respuesta</li>
+                        <li>Ignorarlas y escribir tu análisis desde cero</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>✓ Evaluación con Taxonomía de Bloom en Cada Porqué</h4>
+            <p>Después de escribir o seleccionar tu respuesta en cada campo de "Por qué", RootMind puede evaluar la calidad de tu análisis usando la <strong>Taxonomía de Bloom</strong>:</p>
+
+            <p><strong>¿Cómo funciona?</strong></p>
+            <ul>
+                <li><strong>Si seleccionas una opción de RootMind:</strong> La evaluación se hace <strong>automáticamente</strong></li>
+                <li><strong>Si escribes tu propia respuesta:</strong> Se habilitará el botón <strong>"✓ Evaluar con RootMind"</strong>
+                    <ul>
+                        <li>Al hacer clic, RootMind analizará tu porqué</li>
+                        <li>Te mostrará en qué nivel de Bloom estás (RECORDAR, COMPRENDER, APLICAR, ANALIZAR o EVALUAR)</li>
+                        <li>Te dará <strong>feedback específico</strong> y preguntas de coaching para ayudarte a mejorar</li>
+                        <li>Si no estás en nivel EVALUAR, te guiará con preguntas para profundizar más</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div style="width: 100%; margin: 20px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/evaluando%20porque%20rootmind.png?raw=true"
+                     alt="Evaluando Porqué con RootMind"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 RootMind evaluando tu porqué bajo la Taxonomía de Bloom y ofreciendo coaching para mejorar
+                </p>
+            </div>
+
+            <div class="info-box success">
+                <div class="info-box-title">
+                    <span class="icon">🎯</span>
+                    <span>Beneficio del Coaching</span>
+                </div>
+                <p>Usar el coaching de RootMind en cada porqué te ayuda a:<br>
+                ✅ Alcanzar el nivel EVALUAR (1.0 punto)<br>
+                ✅ Mejorar tu puntuación final<br>
+                ✅ Desarrollar pensamiento crítico más profundo<br>
+                ✅ Encontrar causas raíz más precisas</p>
+            </div>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Tip Importante</span>
+                </div>
+                <p>El formulario de contexto solo aparece la <strong>primera vez</strong> que usas el tutor. RootMind recordará ese contexto para los siguientes porqués del mismo análisis.</p>
+            </div>
+
+            <h4>🎯 Función 2: Sugerir Causa Raíz</h4>
+            <p><strong>¿Cuándo usarla?</strong></p>
+            <ul>
+                <li>Cuando ya escribiste tus porqués (mínimo los 3 primeros)</li>
+                <li>No estás seguro de cuál es la verdadera causa raíz</li>
+                <li>Quieres validar tu análisis antes de continuar</li>
+            </ul>
+
+            <p><strong>¿Cómo funciona?</strong></p>
+            <ol>
+                <li>En la sección "Causa Raíz Principal", haz clic en el botón <strong>"Asistencia RootMind"</strong> (con ícono de robot)</li>
+                <li>RootMind analizará tu problema inicial y todos tus porqués</li>
+                <li>Te mostrará un modal con:
+                    <ul>
+                        <li><strong>3 opciones</strong> diferentes de causa raíz</li>
+                        <li><strong>Análisis detallado</strong> del razonamiento detrás de cada opción</li>
+                    </ul>
+                </li>
+                <li>Puedes:
+                    <ul>
+                        <li>Seleccionar una opción (se auto-completa el campo "Causa Raíz")</li>
+                        <li>Combinar ideas de las opciones y escribir tu propia causa raíz</li>
+                        <li>Ignorar las sugerencias completamente</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/Sugerencias%20de%20Causa%20Ra%C3%ADz.png?raw=true"
+                     alt="Sugerencias de Causa Raíz"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Modal con las 3 opciones de causa raíz sugeridas por RootMind con análisis detallado
+                </p>
+            </div>
+
+            <div class="info-box warning">
+                <div class="info-box-title">
+                    <span class="icon">⚠️</span>
+                    <span>Recuerda</span>
+                </div>
+                <p>Las sugerencias de RootMind son <strong>opcionales</strong>. Tú tienes la decisión final porque conoces mejor tu contexto operativo.</p>
+            </div>
+
+            <h4>📋 Función 3: Sugerir Plan de Acción</h4>
+            <p><strong>¿Cuándo usarla?</strong></p>
+            <ul>
+                <li>En el paso "Plan de Acción" después de identificar la causa raíz</li>
+                <li>Necesitas ideas de acciones correctivas concretas</li>
+                <li>Quieres asegurarte de no olvidar acciones importantes</li>
+            </ul>
+
+            <p><strong>¿Cómo funciona?</strong></p>
+            <ol>
+                <li>En la sección "Plan de Acción", haz clic en <strong>"Asistencia RootMind"</strong></li>
+                <li>RootMind analizará el problema y la causa raíz identificada</li>
+                <li>Te mostrará <strong>3-4 acciones</strong> concretas, cada una con:
+                    <ul>
+                        <li><strong>Descripción</strong> específica y medible</li>
+                        <li><strong>Prioridad sugerida</strong> (ALTA 🔴, MEDIA 🟡, BAJA 🟢)</li>
+                        <li><strong>Días sugeridos</strong> para vencimiento (1-20 días)</li>
+                        <li><strong>Justificación</strong> de por qué es importante</li>
+                    </ul>
+                </li>
+                <li>Puedes:
+                    <ul>
+                        <li><strong>Agregar una acción</strong> específica individualmente</li>
+                        <li><strong>Agregar todas las acciones</strong> de una vez</li>
+                        <li>Modificar las acciones agregadas antes de guardar</li>
+                        <li>Cerrar el modal y crear tus propias acciones manualmente</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/Sugerencias%20de%20Plan%20de%20Acci%C3%B3n.png?raw=true"
+                     alt="Sugerencias de Plan de Acción"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Modal con las sugerencias de acciones de RootMind, incluyendo descripción, prioridad, días y justificación
+                </p>
+            </div>
+
+            <h4>⚙️ Acciones Creadas con RootMind</h4>
+            <p>Cuando seleccionas una acción sugerida por RootMind (ya sea individualmente o todas a la vez), el sistema automáticamente:</p>
+
+            <ul>
+                <li>✅ <strong>Asigna la prioridad recomendada</strong> (ALTA, MEDIA o BAJA) basada en el análisis del impacto</li>
+                <li>✅ <strong>Establece los días para cerrar la acción</strong> según la complejidad y urgencia (1-20 días)</li>
+                <li>✅ <strong>Pre-completa la descripción</strong> de forma específica y medible</li>
+            </ul>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Puedes Personalizar</span>
+                </div>
+                <p>Aunque RootMind asigna automáticamente la prioridad y los días, <strong>puedes editar cualquier campo</strong> antes de guardar la acción. Esto te permite ajustar las sugerencias a tu contexto específico y disponibilidad de recursos.</p>
+            </div>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/planes%20creados%20por%20rootmin.png?raw=true"
+                     alt="Planes de Acción Creados por RootMind"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Acciones agregadas desde RootMind con prioridad y días asignados automáticamente, listas para editar si es necesario
+                </p>
+            </div>
+
+            <h3>🧠 Sistema de Coaching con Taxonomía de Bloom</h3>
+            <p><strong>¿Qué es la Taxonomía de Bloom?</strong></p>
+            <p>Es una escala de <strong>5 niveles</strong> de pensamiento crítico que RootMind usa para evaluar y mejorar tus análisis:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nivel</th>
+                        <th>Puntos</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>EVALUAR</strong> ⭐⭐⭐⭐⭐</td>
+                        <td>1.0</td>
+                        <td>Justifica, valora alternativas, considera trade-offs</td>
+                        <td>"Aunque hubo error del operador, considerando que el proceso no tenía validaciones automáticas, la causa raíz es la ausencia de controles preventivos"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ANALIZAR</strong> ⭐⭐⭐⭐</td>
+                        <td>0.5</td>
+                        <td>Identifica múltiples factores y sus relaciones</td>
+                        <td>"Ocurrió por 3 factores: falta de capacitación, ausencia de supervisión, y herramienta inadecuada"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>APLICAR</strong> ⭐⭐⭐</td>
+                        <td>0.0</td>
+                        <td>Menciona procedimientos sin analizar</td>
+                        <td>"Faltó revisar el checklist"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>COMPRENDER</strong> ⭐⭐</td>
+                        <td>0.0</td>
+                        <td>Explica básicamente sin profundizar</td>
+                        <td>"Se cayó porque no se configuró bien"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RECORDAR</strong> ⭐</td>
+                        <td>0.0</td>
+                        <td>Solo menciona un hecho</td>
+                        <td>"Fue error del sistema"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box success">
+                <div class="info-box-title">
+                    <span class="icon">🎯</span>
+                    <span>Objetivo en RootMind</span>
+                </div>
+                <p>Llegar al nivel <strong>EVALUAR</strong> (1.0 punto) en tus respuestas. Este es el nivel más alto de pensamiento crítico.</p>
+            </div>
+
+            <h4>¿Cómo te ayuda RootMind a mejorar?</h4>
+            <p>RootMind actúa como un <strong>coach</strong> que te guía con preguntas específicas según tu nivel actual:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Si estás en...</th>
+                        <th>RootMind te preguntará...</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>RECORDAR</strong></td>
+                        <td>"¿Qué otros factores pudieron haber contribuido?"<br>"¿Puedes identificar las diferentes partes involucradas?"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>COMPRENDER</strong></td>
+                        <td>"¿Qué relación hay entre X y Y?"<br>"¿Cuáles fueron las causas subyacentes?"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>APLICAR</strong></td>
+                        <td>"¿Por qué falló ese procedimiento específicamente?"<br>"¿Qué factores del sistema permitieron que esto ocurriera?"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ANALIZAR</strong></td>
+                        <td>"De todos los factores identificados, ¿cuál es el más crítico y POR QUÉ?"<br>"¿Qué pasaría si se hubiera abordado X en lugar de Y?"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Consejo Clave</span>
+                </div>
+                <p>No te saltes las preguntas de coaching de RootMind. Responderlas es la clave para:<br>
+                ✅ Mejorar tu puntuación<br>
+                ✅ Desarrollar pensamiento crítico real<br>
+                ✅ Encontrar causas raíz más profundas<br>
+                ✅ Subir en el ranking</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="evaluacion">📊 Sistema de Evaluación Automática</h2>
+
+            <h3>¿Qué sucede después de Guardar?</h3>
+            <p>Después de crear tus planes de acción y hacer clic en <strong>"Guardar y Evaluar"</strong>, RootMind:</p>
+            <ol>
+                <li>✅ <strong>Guarda tu 5 Porqués completo</strong> (problema, porqués, causa raíz y acciones)</li>
+                <li>🤖 <strong>Realiza el análisis automático</strong> evaluando la calidad de tu análisis</li>
+                <li>📊 <strong>Te redirige a la vista detalle</strong> del 5 Porqués creado</li>
+                <li>⭐ <strong>Muestra tu puntuación total</strong> y el desglose por criterios</li>
+            </ol>
+
+            <h3>Vista Detalle del 5 Porqués con Calificación</h3>
+            <p>Una vez evaluado, verás tu 5 Porqués en la vista detalle con:</p>
+            <ul>
+                <li>📋 Todo el contenido de tu análisis (problema, porqués, causa raíz)</li>
+                <li>⭐ <strong>Puntuación total obtenida</strong> (0-4 puntos)</li>
+                <li>🎯 Clasificación de calidad (EXCELENTE, BUENA, ACEPTABLE, NECESITA MEJORAR)</li>
+            </ul>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/vita%20detalle%20del%20porque%20creado%20con%20su%20calificacion.png?raw=true"
+                     alt="Vista Detalle del 5 Porqués con Calificación"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Vista detalle del 5 Porqués creado mostrando el contenido completo y la puntuación obtenida
+                </p>
+            </div>
+
+            <h3>Desglose de la Evaluación RootMind</h3>
+            <p>En la misma vista detalle, más abajo encontrarás el <strong>desglose completo de tu evaluación</strong> con los 3 criterios analizados por RootMind:</p>
+
+            <div style="width: 100%; margin: 30px 0; text-align: center;">
+                <img src="https://github.com/Davidpwbi/Mnuales/blob/main/destalle%20calificacion%20bloom.png?raw=true"
+                     alt="Detalle de Calificación Bloom"
+                     style="max-width: 100%; height: auto; border-radius: 15px; border: 2px solid var(--color-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="margin-top: 10px; color: #666; font-size: 14px; font-style: italic;">
+                    📸 Detalle de la evaluación mostrando Nivel Bloom, Calidad del Planteamiento y Calidad de la Solución
+                </p>
+            </div>
+
+            <h3>¿Cómo se Califica tu 5 Porqués?</h3>
+            <p>RootMind evalúa tu análisis <strong>automáticamente</strong> en 3 criterios:</p>
+
+            <h4>Criterio 1: Nivel Bloom (0-1 punto)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nivel</th>
+                        <th>Puntos</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>EVALUAR</strong></td>
+                        <td>1.0</td>
+                        <td>Incluye juicio crítico y justificación sólida</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ANALIZAR</strong></td>
+                        <td>0.5</td>
+                        <td>Identifica múltiples factores y relaciones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>APLICAR/COMPRENDER/RECORDAR</strong></td>
+                        <td>0.0</td>
+                        <td>Análisis superficial o descriptivo</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Criterio 2: Coherencia del Planteamiento (0-1 punto)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Coherencia</th>
+                        <th>Puntos</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Coherente y contextual</strong></td>
+                        <td>1.0</td>
+                        <td>Los porqués tienen lógica secuencial clara</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sin coherencia</strong></td>
+                        <td>0.0</td>
+                        <td>Los porqués no se conectan entre sí</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Criterio 3: Calidad de la Solución (0-2 puntos)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Calidad</th>
+                        <th>Puntos</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Viable y clara</strong></td>
+                        <td>2.0</td>
+                        <td>Solución específica, alcanzable y medible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adecuada</strong></td>
+                        <td>1.0</td>
+                        <td>Solución buena pero genérica</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Aceptable</strong></td>
+                        <td>0.5</td>
+                        <td>Solución vaga o poco práctica</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Necesita claridad</strong></td>
+                        <td>0.0</td>
+                        <td>Sin solución clara</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Puntuación Total</h3>
+            <pre><code>Puntuación Total = Criterio 1 + Criterio 2 + Criterio 3
+                 = 1.0 + 1.0 + 1.5
+                 = 3.5 puntos ⭐⭐⭐⭐ (EXCELENTE)</code></pre>
+
+            <h3>Clasificación de Calidad</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Puntos</th>
+                        <th>Clasificación</th>
+                        <th>Significado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>3.0 - 4.0</strong></td>
+                        <td>EXCELENTE</td>
+                        <td>Análisis de alta calidad</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2.0 - 2.9</strong></td>
+                        <td>BUENA</td>
+                        <td>Análisis correcto con margen de mejora</td>
+                    </tr>
+                    <tr>
+                        <td><strong>1.0 - 1.9</strong></td>
+                        <td>ACEPTABLE</td>
+                        <td>Análisis básico, necesita desarrollo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>0.0 - 0.9</strong></td>
+                        <td>NECESITA MEJORAR</td>
+                        <td>Requiere coaching urgente</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box success">
+                <div class="info-box-title">
+                    <span class="icon">🎯</span>
+                    <span>Cómo Mejorar tu Score</span>
+                </div>
+                <p>Para llegar a 4.0 puntos:</p>
+                <ol>
+                    <li><strong>Usa el Coaching de RootMind</strong> → Te ayuda a llegar a nivel EVALUAR (+1.0)</li>
+                    <li><strong>Verifica la lógica</strong> → Asegúrate de que cada "por qué" responde al anterior (+1.0)</li>
+                    <li><strong>Propón soluciones específicas</strong> → No digas "mejorar el proceso", di "implementar validación automática en el campo X del sistema Y" (+2.0)</li>
+                </ol>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="crear-acciones">✅ Crear Acciones</h2>
+
+            <h3>¿Qué son las Acciones?</h3>
+            <p>Las <strong>acciones</strong> son las tareas concretas que debes hacer para resolver el problema identificado en tu 5 Porqués.</p>
+
+            <h3>¿Cuándo Crear Acciones?</h3>
+            <ul>
+                <li>✅ Después de que tu 5 Porqués fue evaluado</li>
+                <li>✅ Cuando identificaste la causa raíz</li>
+                <li>✅ Cuando tienes claro qué hacer para solucionar</li>
+            </ul>
+
+            <h3>Campos del Formulario</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Descripción</strong></td>
+                        <td>¿Qué hay que hacer?</td>
+                        <td>"Configurar regla de priorización VIP en módulo WMS-Picking"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Responsable</strong></td>
+                        <td>¿Quién lo hará?</td>
+                        <td>Juan Pérez (Jefe de TI)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fecha de Vencimiento</strong></td>
+                        <td>¿Para cuándo?</td>
+                        <td>15 días desde hoy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Prioridad</strong></td>
+                        <td>¿Qué tan urgente?</td>
+                        <td>ALTA 🔴 / MEDIA 🟡 / BAJA 🟢</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Estado</strong></td>
+                        <td>Estado inicial</td>
+                        <td>PENDIENTE (default)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Tip</span>
+                </div>
+                <p>Puedes crear múltiples acciones para un mismo 5 Porqués si la solución requiere varios pasos</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="seguimiento-acciones">📋 Seguimiento de Acciones</h2>
+
+            <h3>Estados de una Acción</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Icono</th>
+                        <th>Significado</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>PENDIENTE</strong></td>
+                        <td>⏳</td>
+                        <td>No se ha iniciado</td>
+                        <td>Gris</td>
+                    </tr>
+                    <tr>
+                        <td><strong>EN_PROGRESO</strong></td>
+                        <td>🔄</td>
+                        <td>Se está trabajando en ella</td>
+                        <td>Azul</td>
+                    </tr>
+                    <tr>
+                        <td><strong>COMPLETADA</strong></td>
+                        <td>✅</td>
+                        <td>Terminada y verificada</td>
+                        <td>Verde</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CANCELADA</strong></td>
+                        <td>❌</td>
+                        <td>No se realizará</td>
+                        <td>Rojo</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Agregar Comentarios</h3>
+            <p>Los comentarios te permiten:</p>
+            <ul>
+                <li>💬 Actualizar sobre el progreso</li>
+                <li>❓ Hacer preguntas al responsable</li>
+                <li>📝 Documentar decisiones tomadas</li>
+                <li>🔔 Notificar a otros usuarios</li>
+            </ul>
+
+            <h3>Subir Evidencia</h3>
+            <p><strong>¿Qué es la evidencia?</strong></p>
+            <ul>
+                <li>Prueba de que completaste la acción</li>
+                <li>Puede ser: captura de pantalla, documento, link a sistema</li>
+            </ul>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Tip</span>
+                </div>
+                <p>Siempre agrega evidencia al completar una acción para facilitar la aprobación</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="mis-5-porques">📝 Mis 5 Porqués</h2>
+
+            <h3>Ver tu Historial de Análisis</h3>
+            <p>En esta sección puedes ver todos los 5 Porqués que has creado, con opciones para filtrar y buscar.</p>
+
+            <h3>Filtrar y Buscar</h3>
+            <p>Puedes filtrar por:</p>
+            <ul>
+                <li><strong>Estado:</strong> Borradores vs Evaluados</li>
+                <li><strong>Puntuación:</strong> Excelente (3-4), Buena (2-3), etc.</li>
+                <li><strong>Indicador KPI:</strong> TRI, OTIF, ON TIME, etc.</li>
+                <li><strong>Fecha:</strong> Último mes, últimos 3 meses, etc.</li>
+                <li><strong>Búsqueda:</strong> Por palabras clave en el problema</li>
+            </ul>
+
+            <div class="info-box warning">
+                <div class="info-box-title">
+                    <span class="icon">⚠️</span>
+                    <span>Importante</span>
+                </div>
+                <p>Solo puedes editar <strong>borradores</strong>. Una vez evaluado, no se puede modificar.</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="rankings">🏆 Rankings y Gamificación</h2>
+
+            <h3>¿Qué es el Ranking?</h3>
+            <p>El ranking muestra <strong>quiénes son los mejores analistas</strong> de tu organización basado en la puntuación total acumulada.</p>
+
+            <h3>Top Performers</h3>
+            <p>Los <strong>top 3</strong> tienen reconocimiento especial:</p>
+            <ul>
+                <li>🥇 <strong>1er Lugar</strong> - Medalla de oro + destacado especial</li>
+                <li>🥈 <strong>2do Lugar</strong> - Medalla de plata</li>
+                <li>🥉 <strong>3er Lugar</strong> - Medalla de bronce</li>
+            </ul>
+
+            <h3>Cómo Mejorar tu Posición</h3>
+            <div class="info-box success">
+                <div class="info-box-title">
+                    <span class="icon">🎯</span>
+                    <span>Estrategias para subir en el ranking</span>
+                </div>
+                <ol>
+                    <li><strong>Calidad sobre Cantidad</strong>
+                        <ul>
+                            <li>Mejor tener 5 análisis con 4.0 puntos</li>
+                            <li>Que 20 análisis con 2.0 puntos</li>
+                        </ul>
+                    </li>
+                    <li><strong>Usa el Coaching de IA</strong>
+                        <ul>
+                            <li>Te ayuda a llegar a nivel EVALUAR</li>
+                            <li>Aumenta tu puntuación consistentemente</li>
+                        </ul>
+                    </li>
+                    <li><strong>Sé Específico en tus Soluciones</strong>
+                        <ul>
+                            <li>Evita generalidades</li>
+                            <li>Propone acciones concretas y medibles</li>
+                        </ul>
+                    </li>
+                    <li><strong>Mantén Consistencia</strong>
+                        <ul>
+                            <li>Crea 5 Porqués regularmente</li>
+                            <li>El ranking premia la constancia</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="notificaciones">🔔 Notificaciones</h2>
+
+            <h3>Tipos de Notificaciones</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Icono</th>
+                        <th>Prioridad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Evaluación Completada</td>
+                        <td>📊</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                    <tr>
+                        <td>Puntaje Bajo</td>
+                        <td>⚠️</td>
+                        <td>HIGH</td>
+                    </tr>
+                    <tr>
+                        <td>Acción por Vencer</td>
+                        <td>⏰</td>
+                        <td>HIGH</td>
+                    </tr>
+                    <tr>
+                        <td>Acción Vencida</td>
+                        <td>🔴</td>
+                        <td>CRITICAL</td>
+                    </tr>
+                    <tr>
+                        <td>Cambio de Estado</td>
+                        <td>🔄</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                    <tr>
+                        <td>Comentario Nuevo</td>
+                        <td>💬</td>
+                        <td>MEDIUM</td>
+                    </tr>
+                    <tr>
+                        <td>Ranking Actualizado</td>
+                        <td>🏆</td>
+                        <td>LOW</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Tip</span>
+                </div>
+                <p>No desactives notificaciones de acciones vencidas (CRITICAL), son importantes para tu desempeño</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="perfil">👤 Perfil de Usuario</h2>
+
+            <h3>Información Personal</h3>
+            <p>Datos que verás:</p>
+            <ul>
+                <li>👤 Nombre completo</li>
+                <li>📧 Email</li>
+                <li>🎭 Rol (USER, ADMIN, SUPERVISOR)</li>
+                <li>📍 Región y Centro asignados</li>
+                <li>💼 Cargo</li>
+                <li>📅 Fecha de registro</li>
+            </ul>
+
+            <h3>Estadísticas Personales</h3>
+            <ul>
+                <li>📊 Total de 5 Porqués creados</li>
+                <li>⭐ Promedio de puntuación</li>
+                <li>🏆 Posición en ranking</li>
+                <li>✅ Acciones completadas / Total acciones</li>
+                <li>📈 Evolución de tu puntuación (gráfico)</li>
+            </ul>
+
+            <div class="info-box warning">
+                <div class="info-box-title">
+                    <span class="icon">⚠️</span>
+                    <span>Importante</span>
+                </div>
+                <p>Usa una contraseña segura (letras, números, símbolos) al cambiarla</p>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="panel-admin">⚙️ Panel de Administrador</h2>
+
+            <blockquote>
+                <strong>Nota:</strong> Esta sección solo aplica para usuarios con rol <strong>ADMIN</strong>
+            </blockquote>
+
+            <h3>Gestión de Usuarios</h3>
+
+            <h4>Crear Nuevos Usuarios</h4>
+            <p>Campos del formulario:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Nombre</strong></td>
+                        <td>Nombre completo del usuario</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>Email corporativo (será su usuario)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contraseña</strong></td>
+                        <td>Contraseña temporal (debe cambiarla en primer login)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rol</strong></td>
+                        <td>USER o SUPERVISOR</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Centro</strong></td>
+                        <td>Centro de distribución (solo los de tu gerencia)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cargo</strong></td>
+                        <td>Posición laboral</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box tip">
+                <div class="info-box-title">
+                    <span class="icon">💡</span>
+                    <span>Nota</span>
+                </div>
+                <p>La región se asigna automáticamente desde tu gerencia</p>
+            </div>
+
+            <h4>Desactivar/Activar Usuarios</h4>
+            <p><strong>Desactivar un usuario:</strong></p>
+            <ul>
+                <li>No podrá iniciar sesión</li>
+                <li>Sus 5 Porqués y acciones permanecen</li>
+                <li>Puedes reactivarlo cuando quieras</li>
+            </ul>
+
+            <h3>Ver Estadísticas de la Gerencia</h3>
+            <p>Como ADMIN puedes ver:</p>
+            <ul>
+                <li>📊 Rendimiento de todos los usuarios de tu gerencia</li>
+                <li>📈 Tendencias de calidad por centro</li>
+                <li>👥 Ranking interno de tu gerencia</li>
+                <li>✅ Estado de acciones de todo el equipo</li>
+            </ul>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="tips">💡 Tips y Mejores Prácticas</h2>
+
+            <h3>Para Escribir Buenos 5 Porqués</h3>
+
+            <h4>✅ SÍ Hacer</h4>
+            <ol>
+                <li><strong>Sé Específico</strong>
+                    <ul>
+                        <li>❌ Malo: "Porque el operador se equivocó"</li>
+                        <li>✅ Bueno: "Porque el operador no validó el código de barras contra la orden de pedido"</li>
+                    </ul>
+                </li>
+                <li><strong>Enfócate en el Proceso, no en las Personas</strong>
+                    <ul>
+                        <li>❌ Malo: "Porque Juan es descuidado"</li>
+                        <li>✅ Bueno: "Porque no existe una checklist obligatoria de verificación"</li>
+                    </ul>
+                </li>
+                <li><strong>Busca Causas que Puedes Controlar</strong>
+                    <ul>
+                        <li>❌ Malo: "Porque el proveedor es lento"</li>
+                        <li>✅ Bueno: "Porque no tenemos SLA definido con proveedor ni penalizaciones por retraso"</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>❌ NO Hacer</h4>
+            <ul>
+                <li>❌ Responder "por error humano" (muy vago)</li>
+                <li>❌ Usar los mismos porqués para diferentes problemas</li>
+                <li>❌ Quedarte en lo superficial</li>
+                <li>❌ Culpar a personas específicas</li>
+                <li>❌ Inventar causas sin evidencia</li>
+            </ul>
+
+            <h3>Para Maximizar tu Puntuación</h3>
+            <div class="info-box success">
+                <div class="info-box-title">
+                    <span class="icon">🎯</span>
+                    <span>Guía rápida para 4.0 puntos</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criterio</th>
+                            <th>¿Cómo lograrlo?</th>
+                            <th>Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Nivel Bloom</strong></td>
+                            <td>Usa coaching de IA + justifica tus decisiones</td>
+                            <td>+1.0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Coherencia</strong></td>
+                            <td>Lee tus porqués en secuencia, verifica que conecten</td>
+                            <td>+1.0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Solución Viable</strong></td>
+                            <td>Sé específico: "Implementar X en sistema Y para Z"</td>
+                            <td>+2.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Para Gestionar Acciones Efectivamente</h3>
+            <ol>
+                <li><strong>Prioriza Correctamente</strong>
+                    <ul>
+                        <li>🔴 ALTA: Soluciona la causa raíz directamente</li>
+                        <li>🟡 MEDIA: Previene recurrencia</li>
+                        <li>🟢 BAJA: Mejora continua adicional</li>
+                    </ul>
+                </li>
+                <li><strong>Define Plazos Realistas</strong>
+                    <ul>
+                        <li>Considera dependencias (aprobaciones, compras, desarrollo)</li>
+                        <li>Mejor poner 20 días y terminar en 15</li>
+                        <li>Que poner 5 días y pedir extensiones</li>
+                    </ul>
+                </li>
+                <li><strong>Documenta el Progreso</strong>
+                    <ul>
+                        <li>Agrega comentarios semanales</li>
+                        <li>Sube evidencia temprano</li>
+                        <li>Comunica bloqueos inmediatamente</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <h2 id="faq">❓ Preguntas Frecuentes (FAQ)</h2>
+
+            <h3>Inicio de Sesión y Acceso</h3>
+
+            <h4>¿Qué hago si olvidé mi contraseña?</h4>
+            <p>Contacta a tu administrador de gerencia para que te resetee la contraseña.</p>
+
+            <h4>¿Por qué dice "Tu licencia ha vencido"?</h4>
+            <p>Tu organización debe renovar la licencia. Contacta a tu administrador ADMIN o al área de compras.</p>
+
+            <h4>¿Puedo acceder desde mi celular?</h4>
+            <p>Sí, RootMind es responsive. Usa el mismo link desde el navegador de tu celular.</p>
+
+            <h3>Crear y Editar 5 Porqués</h3>
+
+            <h4>¿Puedo editar un 5 Porqués después de enviarlo?</h4>
+            <p>No. Una vez enviado para evaluación, queda bloqueado. Solo puedes editar <strong>borradores</strong>.</p>
+
+            <h4>¿Cuántos 5 Porqués puedo crear?</h4>
+            <p>Ilimitados. Crea uno por cada problema que ocurra.</p>
+
+            <h4>¿Es obligatorio llenar los 5 porqués?</h4>
+            <p>Solo los primeros <strong>3 son obligatorios</strong>. Los porqués 4 y 5 son opcionales, pero ayudan a profundizar más.</p>
+
+            <h3>Evaluación y Puntuación</h3>
+
+            <h4>¿Cómo se calcula mi puntuación?</h4>
+            <p>Se evalúan 3 criterios:</p>
+            <ul>
+                <li>Nivel Bloom (0-1 punto)</li>
+                <li>Coherencia (0-1 punto)</li>
+                <li>Calidad de solución (0-2 puntos)</li>
+                <li><strong>Total: 0-4 puntos</strong></li>
+            </ul>
+
+            <h4>¿Puedo solicitar reevaluación?</h4>
+            <p>No, la evaluación es automática y objetiva. Pero puedes crear un nuevo 5 Porqués aplicando las lecciones aprendidas.</p>
+
+            <h3>Acciones</h3>
+
+            <h4>¿Qué pasa si una acción vence?</h4>
+            <p>Recibirás notificaciones (3 días antes, 1 día antes, al vencer). Si vence, queda marcada como vencida pero puedes completarla aún.</p>
+
+            <h4>¿Puedo delegar una acción a otra persona?</h4>
+            <p>Sí, puedes cambiar el responsable si eres ADMIN o si eres el creador de la acción.</p>
+
+            <h3>Rankings y Notificaciones</h3>
+
+            <h4>¿Cómo subo en el ranking?</h4>
+            <p>Creando 5 Porqués de alta calidad (3.0-4.0 puntos) consistentemente.</p>
+
+            <h4>¿El ranking se reinicia cada mes?</h4>
+            <p>No, es acumulativo. Se basa en tu puntuación total histórica.</p>
+
+            <h3>Ayuda de IA</h3>
+
+            <h4>¿Cuándo debo usar la ayuda de RootMind IA?</h4>
+            <ul>
+                <li>Cuando no sabes qué causa raíz seleccionar</li>
+                <li>Cuando necesitas ideas de acciones</li>
+                <li>Cuando tu respuesta está en nivel bajo (RECORDAR, COMPRENDER)</li>
+            </ul>
+
+            <h4>¿Debo seguir siempre las sugerencias de la IA?</h4>
+            <p>No. La IA es una <strong>guía</strong>, pero tú tomas la decisión final basado en tu conocimiento del contexto.</p>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <div class="info-box success" style="text-align: center; font-size: 18px;">
+                <h2 style="color: var(--color-primary); margin-bottom: 15px;">🎯 Meta Final</h2>
+                <p><strong>Convertirte en un analista de clase mundial:</strong></p>
+                <ul style="list-style: none; padding: 0;">
+                    <li>🧠 Pensar críticamente (nivel EVALUAR)</li>
+                    <li>🎯 Identificar causas raíz reales</li>
+                    <li>✅ Crear soluciones efectivas y medibles</li>
+                    <li>📈 Mejorar continuamente tu desempeño</li>
+                </ul>
+            </div>
+
+            <hr style="border: 1px solid rgba(126, 206, 31, 0.3); margin: 60px 0;">
+
+            <div style="text-align: center; padding: 40px 0; background: rgba(126, 206, 31, 0.05); border-radius: 15px; margin-top: 60px;">
+                <h3 style="color: var(--color-primary); margin-bottom: 20px;">📞 ¿Necesitas Ayuda?</h3>
+                <ol style="text-align: left; max-width: 400px; margin: 0 auto; color: #B8B8B8;">
+                    <li>Consulta este manual</li>
+                    <li>Pregunta a tu ADMIN</li>
+                    <li>Usa el coaching de RootMind IA</li>
+                    <li>Contacta a soporte técnico</li>
+                </ol>
+                <p style="margin-top: 30px; color: #666; font-size: 14px;">
+                    <strong>Versión del Manual:</strong> 1.0<br>
+                    <strong>Última actualización:</strong> 2025<br>
+                    <strong>Plataforma:</strong> RootMind - Análisis de Causa Raíz con IA
+                </p>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Smooth scroll para los links de navegación
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Actualizar link activo
+                    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Búsqueda en el manual
+        const searchInput = document.getElementById('searchInput');
+        const content = document.getElementById('content');
+        let originalContent = content.innerHTML;
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+
+            if (searchTerm === '') {
+                content.innerHTML = originalContent;
+                return;
+            }
+
+            // Buscar en el contenido
+            const allText = content.innerText.toLowerCase();
+            if (allText.includes(searchTerm)) {
+                // Highlight search results (implementación básica)
+                const regex = new RegExp(searchTerm, 'gi');
+                content.innerHTML = originalContent.replace(regex, match =>
+                    `<mark style="background: rgba(126, 206, 31, 0.3); color: var(--color-primary);">${match}</mark>`
+                );
+            }
+        });
+
+        // Actualizar link activo según scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Observar todas las secciones principales
+        document.querySelectorAll('h2[id]').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

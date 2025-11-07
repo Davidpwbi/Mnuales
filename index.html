@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RootMind - Análisis de Causa Raíz con IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #7ECE1F;
+            --color-primary-dark: #6AB519;
+            --color-secondary: #80D620;
+            --color-accent: #84DA20;
+            --color-dark: #121B15;
+            --color-gray-dark: #101913;
+            --color-gray: #272D29;
+            --color-light: #FAFAFA;
+            --color-white: #FCFCFD;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0F1912 0%, #1a2821 100%);
+            color: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            width: 100%;
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot.active {
+            background: var(--color-primary);
+            transform: scale(1.3);
+        }
+
+        .nav-dot:hover {
+            background: var(--color-secondary);
+        }
+
+        .nav-dot::after {
+            content: attr(data-title);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+        }
+
+        /* Slide 1: Portada */
+        .slide-1 {
+            background: linear-gradient(135deg, #0a1310 0%, #1a2821 50%, #0f1912 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-1::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(126, 206, 31, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .slide-1::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(132, 218, 32, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+            animation: pulse 6s ease-in-out infinite reverse;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 1200px;
+        }
+
+        .logo-container {
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+        }
+
+        /* ⚠️ COLOCA TU LOGO AQUÍ ⚠️ */
+        .robot-logo {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background-image: url('https://github.com/Davidpwbi/Mnuales/blob/main/robot-login.png?raw=true'); /* 👈 CAMBIA ESTA RUTA */
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 10px 30px rgba(126, 206, 31, 0.3));
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero-subtitle {
+            font-size: 32px;
+            color: #B8B8B8;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: #888;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--color-dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(126, 206, 31, 0.3);
+            animation: fadeInUp 1s ease 1.2s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(126, 206, 31, 0.5);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide 2: Problema */
+        .slide-2 {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f1912 100%);
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .slide-title {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .problem-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(126, 206, 31, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .problem-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--color-primary);
+            box-shadow: 0 20px 40px rgba(126, 206, 31, 0.2);
+        }
+
+        .problem-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .problem-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+
+        .problem-description {
+            font-size: 16px;
+            color: #B8B8B8;
+            line-height: 1.6;
+        }
+
+        /* Slide 3: Solución */
+        .slide-3 {
+            background: linear-gradient(135deg, #0f1912 0%, #1a2821 100%);
+        }
+
+        .solution-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1200px;
+        }
+
+        .solution-image {
+            width: 100%;
+            height: 400px;
+            background: rgba(126, 206, 31, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            border: 2px solid rgba(126, 206, 31, 0.3);
+            /* ⚠️ COLOCA IMAGEN DE DASHBOARD AQUÍ ⚠️ */
+            background-image: url('RUTA_A_TU_IMAGEN_DASHBOARD.png'); /* 👈 CAMBIA ESTA RUTA */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .solution-content h2 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            font-size: 18px;
+            color: #B8B8B8;
+            margin-bottom: 20px;
+            padding-left: 35px;
+            position: relative;
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        /* Slide 4: Características */
+        .slide-4 {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f1912 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(126, 206, 31, 0.1) 0%, rgba(132, 218, 32, 0.05) 100%);
+            border: 1px solid rgba(126, 206, 31, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--color-primary);
+            box-shadow: 0 20px 50px rgba(126, 206, 31, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+
+        .feature-description {
+            font-size: 15px;
+            color: #999;
+            line-height: 1.6;
+        }
+
+        /* Slide 5: Metodología */
+        .slide-5 {
+            background: linear-gradient(135deg, #0f1912 0%, #1a2821 100%);
+        }
+
+        .methodology-timeline {
+            max-width: 900px;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(126, 206, 31, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 0 30px;
+        }
+
+        .timeline-number {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-dark);
+            box-shadow: 0 5px 20px rgba(126, 206, 31, 0.5);
+        }
+
+        .timeline-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .timeline-description {
+            font-size: 16px;
+            color: #B8B8B8;
+            line-height: 1.6;
+        }
+
+        /* Slide 6: Beneficios */
+        .slide-6 {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f1912 100%);
+        }
+
+        .benefits-container {
+            max-width: 1200px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .benefit-card {
+            background: rgba(126, 206, 31, 0.05);
+            border-left: 5px solid var(--color-primary);
+            border-radius: 15px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            background: rgba(126, 206, 31, 0.1);
+            transform: translateX(10px);
+            box-shadow: -10px 0 30px rgba(126, 206, 31, 0.2);
+        }
+
+        .benefit-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+
+        .benefit-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .benefit-description {
+            font-size: 16px;
+            color: #B8B8B8;
+            line-height: 1.6;
+        }
+
+        /* Slide 7: Tecnología IA */
+        .slide-7 {
+            background: linear-gradient(135deg, #0f1912 0%, #1a2821 100%);
+        }
+
+        .ai-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            align-items: center;
+        }
+
+        .ai-visual {
+            width: 100%;
+            height: 450px;
+            background: rgba(126, 206, 31, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 150px;
+            border: 2px solid rgba(126, 206, 31, 0.3);
+            position: relative;
+            overflow: hidden;
+            /* ⚠️ COLOCA IMAGEN DE IA AQUÍ ⚠️ */
+            background-image: url('RUTA_A_TU_IMAGEN_IA.png'); /* 👈 CAMBIA ESTA RUTA */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .ai-visual::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(126, 206, 31, 0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ai-features {
+            list-style: none;
+        }
+
+        .ai-feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--color-primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .ai-feature-item:hover {
+            background: rgba(126, 206, 31, 0.1);
+            transform: translateX(10px);
+        }
+
+        .ai-feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .ai-feature-description {
+            font-size: 15px;
+            color: #B8B8B8;
+        }
+
+        /* Slide 8: Resultados */
+        .slide-8 {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f1912 100%);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(126, 206, 31, 0.15) 0%, rgba(132, 218, 32, 0.05) 100%);
+            border: 2px solid var(--color-primary);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(126, 206, 31, 0.4);
+        }
+
+        .result-metric {
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .result-label {
+            font-size: 16px;
+            color: #B8B8B8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Slide 9: Casos de Uso */
+        .slide-9 {
+            background: linear-gradient(135deg, #0f1912 0%, #1a2821 100%);
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+        }
+
+        .use-case-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(126, 206, 31, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .use-case-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .use-case-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--color-primary);
+            background: rgba(126, 206, 31, 0.05);
+            box-shadow: 0 20px 40px rgba(126, 206, 31, 0.2);
+        }
+
+        .use-case-icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+
+        .use-case-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+        }
+
+        .use-case-description {
+            font-size: 15px;
+            color: #B8B8B8;
+            line-height: 1.6;
+        }
+
+        /* Slide 10: Contacto/CTA */
+        .slide-10 {
+            background: linear-gradient(135deg, #0a1310 0%, #1a2821 50%, #0f1912 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-10::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(126, 206, 31, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .cta-container {
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .cta-container h2 {
+            font-size: 56px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-container p {
+            font-size: 22px;
+            color: #B8B8B8;
+            margin-bottom: 50px;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 20px 50px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--color-dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(126, 206, 31, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(126, 206, 31, 0.5);
+        }
+
+        .btn-secondary {
+            padding: 20px 50px;
+            background: transparent;
+            color: var(--color-primary);
+            text-decoration: none;
+            border: 2px solid var(--color-primary);
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-primary);
+            color: var(--color-dark);
+            transform: translateY(-5px);
+        }
+
+        .contact-info {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(126, 206, 31, 0.3);
+        }
+
+        .contact-items {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-icon {
+            font-size: 24px;
+            color: var(--color-primary);
+        }
+
+        .contact-text {
+            font-size: 16px;
+            color: #B8B8B8;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-title { font-size: 56px; }
+            .slide-title { font-size: 42px; }
+            .solution-container,
+            .ai-container {
+                grid-template-columns: 1fr;
+            }
+            .features-grid,
+            .use-cases-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 42px; }
+            .hero-subtitle { font-size: 24px; }
+            .slide-title { font-size: 32px; }
+            .features-grid,
+            .benefits-grid,
+            .use-cases-grid,
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-dots { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container" id="presentation">
+
+        <!-- Navegación con puntos -->
+        <div class="nav-dots">
+            <div class="nav-dot active" data-title="Inicio" onclick="scrollToSlide(0)"></div>
+            <div class="nav-dot" data-title="Problema" onclick="scrollToSlide(1)"></div>
+            <div class="nav-dot" data-title="Solución" onclick="scrollToSlide(2)"></div>
+            <div class="nav-dot" data-title="Características" onclick="scrollToSlide(3)"></div>
+            <div class="nav-dot" data-title="Metodología" onclick="scrollToSlide(4)"></div>
+            <div class="nav-dot" data-title="Beneficios" onclick="scrollToSlide(5)"></div>
+            <div class="nav-dot" data-title="Tecnología IA" onclick="scrollToSlide(6)"></div>
+            <div class="nav-dot" data-title="Resultados" onclick="scrollToSlide(7)"></div>
+            <div class="nav-dot" data-title="Casos de Uso" onclick="scrollToSlide(8)"></div>
+            <div class="nav-dot" data-title="Contacto" onclick="scrollToSlide(9)"></div>
+        </div>
+
+        <!-- SLIDE 1: PORTADA -->
+        <section class="slide slide-1">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <div class="robot-logo"></div>
+                </div>
+                <h1 class="hero-title">RootMind</h1>
+                <p class="hero-subtitle">Análisis de Causa Raíz con Inteligencia Artificial</p>
+                <p class="hero-description">
+                    Transforme problemas complejos en soluciones efectivas mediante
+                    metodología 5 Porqués potenciada por IA avanzada
+                </p>
+                <a href="#" class="cta-button">Descubrir más</a>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: PROBLEMA -->
+        <section class="slide slide-2">
+            <div class="content-wrapper">
+                <h2 class="slide-title">Los Desafíos que Enfrentas</h2>
+                <div class="problem-grid">
+                    <div class="problem-card">
+                        <div class="problem-icon">🔴</div>
+                        <h3 class="problem-title">Problemas Recurrentes</h3>
+                        <p class="problem-description">
+                            Los mismos problemas operativos se repiten una y otra vez,
+                            consumiendo tiempo y recursos valiosos sin solución real.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">📉</div>
+                        <h3 class="problem-title">Análisis Superficial</h3>
+                        <p class="problem-description">
+                            Las investigaciones se quedan en la superficie,
+                            atacando síntomas en lugar de causas raíz estructurales.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">⏱️</div>
+                        <h3 class="problem-title">Pérdida de Tiempo</h3>
+                        <p class="problem-description">
+                            Horas invertidas en reuniones improductivas que no
+                            generan acciones concretas ni mejoras medibles.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">📊</div>
+                        <h3 class="problem-title">KPIs Afectados</h3>
+                        <p class="problem-description">
+                            Indicadores críticos (TRI, OTIF, ON TIME) se ven
+                            constantemente impactados por problemas sin resolver.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">👥</div>
+                        <h3 class="problem-title">Falta de Metodología</h3>
+                        <p class="problem-description">
+                            Equipos sin un framework estructurado para análisis
+                            de problemas y desarrollo de pensamiento crítico.
+                        </p>
+                    </div>
+                    <div class="problem-card">
+                        <div class="problem-icon">📝</div>
+                        <h3 class="problem-title">Seguimiento Deficiente</h3>
+                        <p class="problem-description">
+                            Acciones correctivas definidas pero nunca ejecutadas,
+                            sin trazabilidad ni rendición de cuentas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: SOLUCIÓN -->
+        <section class="slide slide-3">
+            <div class="solution-container">
+                <div class="solution-image">
+                    📱
+                </div>
+                <div class="solution-content">
+                    <h2>La Solución Inteligente</h2>
+                    <ul class="solution-features">
+                        <li>Metodología 5 Porqués guiada por IA especializada en análisis de causa raíz</li>
+                        <li>Evaluación automática basada en Taxonomía de Bloom para pensamiento crítico</li>
+                        <li>Sistema de puntuación objetivo que mide la calidad de tus análisis</li>
+                        <li>Coaching en tiempo real para mejorar tus capacidades analíticas</li>
+                        <li>Gestión completa de planes de acción con seguimiento y trazabilidad</li>
+                        <li>Gamificación y rankings para impulsar la mejora continua del equipo</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: CARACTERÍSTICAS -->
+        <section class="slide slide-4">
+            <div class="content-wrapper">
+                <h2 class="slide-title">Características Principales</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3 class="feature-title">IA Especializada</h3>
+                        <p class="feature-description">
+                            Asistente inteligente entrenado específicamente en metodologías
+                            de calidad y análisis de causa raíz
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">5 Porqués Guiados</h3>
+                        <p class="feature-description">
+                            Framework estructurado que te lleva desde el problema
+                            observable hasta la causa raíz profunda
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">Evaluación Automática</h3>
+                        <p class="feature-description">
+                            Sistema de calificación objetivo (0-4 puntos) que mide
+                            nivel Bloom, coherencia y calidad de solución
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3 class="feature-title">Coaching Bloom</h3>
+                        <p class="feature-description">
+                            La IA te hace preguntas estratégicas para elevar tu pensamiento
+                            desde nivel RECORDAR hasta EVALUAR
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h3 class="feature-title">Gestión de Acciones</h3>
+                        <p class="feature-description">
+                            Crea, asigna y monitorea planes de acción con evidencia,
+                            comentarios y flujo de aprobación
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3 class="feature-title">Rankings y Gamificación</h3>
+                        <p class="feature-description">
+                            Sistema de puntos y ranking que incentiva la excelencia
+                            y la competencia sana en el equipo
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: METODOLOGÍA -->
+        <section class="slide slide-5">
+            <div class="content-wrapper">
+                <h2 class="slide-title">Metodología 5 Porqués</h2>
+                <div class="methodology-timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Identifica el Problema</h3>
+                            <p class="timeline-description">
+                                Define claramente qué ocurrió, cuándo, dónde y qué indicador
+                                KPI fue afectado (TRI, OTIF, ON TIME, etc.)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Pregunta ¿Por Qué?</h3>
+                            <p class="timeline-description">
+                                Con ayuda de la IA, profundiza en las causas. Evita respuestas
+                                superficiales y busca factores de proceso, no personas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Identifica la Causa Raíz</h3>
+                            <p class="timeline-description">
+                                La IA analiza tus respuestas y sugiere cuál es la verdadera
+                                causa raíz estructural del problema.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-number">4</div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Crea Plan de Acción</h3>
+                            <p class="timeline-description">
+                                Genera acciones concretas, específicas y medibles.
+                                La IA sugiere acciones basadas en tu análisis.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-number">5</div>
+                        <div class="timeline-content">
+                            <h3 class="timeline-title">Ejecuta y Mide</h3>
+                            <p class="timeline-description">
+                                Asigna responsables, establece fechas y monitorea el progreso.
+                                Adjunta evidencia de cumplimiento.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: BENEFICIOS -->
+        <section class="slide slide-6">
+            <div class="benefits-container">
+                <h2 class="slide-title">Beneficios Medibles</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-number">75%</div>
+                        <h3 class="benefit-title">Reducción de Problemas Recurrentes</h3>
+                        <p class="benefit-description">
+                            Al atacar causas raíz reales en lugar de síntomas,
+                            los problemas dejan de repetirse.
+                        </p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-number">3x</div>
+                        <h3 class="benefit-title">Mejora en Pensamiento Crítico</h3>
+                        <p class="benefit-description">
+                            Los usuarios elevan su nivel de análisis de RECORDAR
+                            a EVALUAR en promedio en 3 meses.
+                        </p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-number">60%</div>
+                        <h3 class="benefit-title">Ahorro de Tiempo</h3>
+                        <p class="benefit-description">
+                            Reuniones más efectivas y análisis más rápidos gracias
+                            al framework estructurado y la IA.
+                        </p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-number">85%</div>
+                        <h3 class="benefit-title">Tasa de Cumplimiento de Acciones</h3>
+                        <p class="benefit-description">
+                            El sistema de seguimiento y notificaciones garantiza
+                            que las acciones se ejecuten realmente.
+                        </p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-number">100%</div>
+                        <h3 class="benefit-title">Trazabilidad</h3>
+                        <p class="benefit-description">
+                            Historial completo de análisis, decisiones y acciones
+                            para auditorías y mejora continua.
+                        </p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-number">↑40%</div>
+                        <h3 class="benefit-title">Mejora en KPIs</h3>
+                        <p class="benefit-description">
+                            Organizaciones reportan mejoras significativas en
+                            TRI, OTIF y ON TIME tras 6 meses de uso.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: TECNOLOGÍA IA -->
+        <section class="slide slide-7">
+            <div class="ai-container">
+                <div class="ai-visual">
+                    🧠
+                </div>
+                <div>
+                    <h2 class="slide-title" style="text-align: left; margin-bottom: 40px;">
+                        Tecnología de IA Avanzada
+                    </h2>
+                    <ul class="ai-features">
+                        <li class="ai-feature-item">
+                            <h3 class="ai-feature-title">🎯 Sugerencia de Causa Raíz</h3>
+                            <p class="ai-feature-description">
+                                Analiza tus 5 porqués y sugiere 3 opciones de causa raíz
+                                con razonamiento detallado para cada una.
+                            </p>
+                        </li>
+                        <li class="ai-feature-item">
+                            <h3 class="ai-feature-title">📋 Generación de Plan de Acción</h3>
+                            <p class="ai-feature-description">
+                                Propone 3-4 acciones concretas con prioridad, plazo y
+                                justificación basadas en tu análisis.
+                            </p>
+                        </li>
+                        <li class="ai-feature-item">
+                            <h3 class="ai-feature-title">🧠 Coaching Taxonomía de Bloom</h3>
+                            <p class="ai-feature-description">
+                                Te guía con preguntas estratégicas para elevar tu nivel
+                                de pensamiento crítico de nivel 1 a nivel 5.
+                            </p>
+                        </li>
+                        <li class="ai-feature-item">
+                            <h3 class="ai-feature-title">📊 Evaluación Inteligente</h3>
+                            <p class="ai-feature-description">
+                                Califica objetivamente tu análisis en 3 criterios:
+                                nivel Bloom, coherencia y calidad de solución.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: RESULTADOS -->
+        <section class="slide slide-8">
+            <div class="content-wrapper">
+                <h2 class="slide-title">Resultados Comprobados</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-metric">4.0</div>
+                        <p class="result-label">Puntuación Promedio</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-metric">95%</div>
+                        <p class="result-label">Nivel Excelente</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-metric">10K+</div>
+                        <p class="result-label">Análisis Realizados</p>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-metric">500+</div>
+                        <p class="result-label">Usuarios Activos</p>
+                    </div>
+                </div>
+                <div style="margin-top: 60px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <p style="font-size: 20px; color: #B8B8B8; line-height: 1.8;">
+                        <em>"RootMind transformó completamente nuestra cultura de resolución de problemas.
+                        Pasamos de apagar incendios a prevenir que ocurran. El nivel de análisis
+                        de nuestro equipo se elevó dramáticamente."</em>
+                    </p>
+                    <p style="margin-top: 20px; color: var(--color-primary); font-weight: 600;">
+                        — Director de Operaciones, Empresa Logística
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: CASOS DE USO -->
+        <section class="slide slide-9">
+            <div class="content-wrapper">
+                <h2 class="slide-title">Casos de Uso</h2>
+                <div class="use-cases-grid">
+                    <div class="use-case-card">
+                        <div class="use-case-icon">🚛</div>
+                        <h3 class="use-case-title">Logística y Distribución</h3>
+                        <p class="use-case-description">
+                            Análisis de entregas tardías, problemas de OTIF,
+                            optimización de rutas y gestión de inventario.
+                        </p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-icon">🏭</div>
+                        <h3 class="use-case-title">Manufactura</h3>
+                        <p class="use-case-description">
+                            Investigación de defectos de calidad, paros de línea,
+                            problemas de eficiencia y desperdicios.
+                        </p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-icon">💊</div>
+                        <h3 class="use-case-title">Salud y Farmacéutica</h3>
+                        <p class="use-case-description">
+                            Análisis de eventos adversos, desviaciones de proceso,
+                            problemas de calidad y compliance.
+                        </p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-icon">🏪</div>
+                        <h3 class="use-case-title">Retail</h3>
+                        <p class="use-case-description">
+                            Problemas de stock, experiencia de cliente,
+                            operación de tiendas y cadena de suministro.
+                        </p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-icon">💻</div>
+                        <h3 class="use-case-title">Tecnología y Software</h3>
+                        <p class="use-case-description">
+                            Análisis de incidentes, root cause analysis de bugs,
+                            problemas de performance y disponibilidad.
+                        </p>
+                    </div>
+                    <div class="use-case-card">
+                        <div class="use-case-icon">🏦</div>
+                        <h3 class="use-case-title">Servicios Financieros</h3>
+                        <p class="use-case-description">
+                            Análisis de errores operacionales, problemas de
+                            compliance, fraudes y experiencia de usuario.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: CONTACTO/CTA FINAL -->
+        <section class="slide slide-10">
+            <div class="cta-container">
+                <h2>¿Listo para Transformar tu Análisis de Problemas?</h2>
+                <p>
+                    Descubre cómo RootMind puede revolucionar la forma en que tu equipo
+                    resuelve problemas y toma decisiones estratégicas.
+                </p>
+                <div class="cta-buttons">
+                    <a href="manual.html" class="btn-primary">📘 Ver Manual de Usuario</a>
+                </div>
+
+                <div class="contact-info">
+                    <div class="contact-items">
+                        <div class="contact-item">
+                            <span class="contact-icon">📧</span>
+                            <span class="contact-text">integralservicemh@gmail.com</span> <!-- 👈 CAMBIA ESTE EMAIL -->
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📱</span>
+                            <span class="contact-text">+57  324-7146958</span> <!-- 👈 CAMBIA ESTE TELÉFONO -->
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">🌐</span>
+                            <span class="contact-text">www.Odinprojectapp.com</span> <!-- 👈 CAMBIA ESTA URL -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Sistema de navegación
+        const presentation = document.getElementById('presentation');
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        // Función para ir a un slide específico
+        function scrollToSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Actualizar navegación en scroll
+        presentation.addEventListener('scroll', () => {
+            const slides = document.querySelectorAll('.slide');
+            const scrollPosition = presentation.scrollTop;
+
+            slides.forEach((slide, index) => {
+                const slideTop = slide.offsetTop;
+                const slideHeight = slide.offsetHeight;
+
+                if (scrollPosition >= slideTop - slideHeight / 2 &&
+                    scrollPosition < slideTop + slideHeight / 2) {
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    navDots[index].classList.add('active');
+                }
+            });
+        });
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            const activeIndex = Array.from(navDots).findIndex(dot =>
+                dot.classList.contains('active')
+            );
+
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (activeIndex < navDots.length - 1) {
+                    scrollToSlide(activeIndex + 1);
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (activeIndex > 0) {
+                    scrollToSlide(activeIndex - 1);
+                }
+            }
+        });
+
+        // Animaciones al entrar en viewport
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-card, .feature-card, .benefit-card, .use-case-card, .result-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
